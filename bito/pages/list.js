@@ -3,6 +3,9 @@ import Head from 'next/head'
 import Header from '../components/Header'
 import { Breadcrumb, List } from 'antd'
 
+import React from "react" 
+React.useLayoutEffect = React.useEffect 
+
 export default function blogList() {
   const [blogList, setBlogList] = useState(
     [
@@ -25,19 +28,19 @@ export default function blogList() {
             <Breadcrumb.Item>视频列表</Breadcrumb.Item>
           </Breadcrumb>
       </div>
-      <List
-        header={<div>最新日志</div>}
-        itemLayout="vertical"
-        dataSource={blogList}
-        renderItem={item => (
-          <List.Item>
-            <div className="blog-title">{item.title}</div>
-            <div className="blog-context">{item.context}</div>
-          </List.Item>
-        )}
-      />
       <main>
         <Header />
+        <List
+            header={<div>最新日志</div>}
+            itemLayout="vertical"
+            dataSource={blogList}
+            renderItem={item => (
+            <List.Item>
+                <div className="blog-title">{item.title}</div>
+                <div className="blog-context">{item.context}</div>
+            </List.Item>
+            )}
+        />
       </main>
     </div>
   )

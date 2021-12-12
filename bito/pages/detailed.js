@@ -3,23 +3,14 @@ import Header from '../components/Header'
 import { Breadcrumb, List } from 'antd'
 import ReactMarkdown from "react-markdown"
 import remarkGfm from 'remark-gfm'
-import React from "react" 
-React.useLayoutEffect = React.useEffect 
+import React, {useState} from "react" 
+import axios from 'axios'
 
-export default function blogList() {
-    const markdown = `A paragraph with *emphasis* and **strong importance**.
 
-> A block quote with ~strikethrough~ and a URL: https://reactjs.org.
-
-* Lists
-* [ ] todo
-* [x] done
-
-A table:
-
-| a | b |
-| - | - |
-`
+function Detailed(content) {
+  const [context, setContext] = useState(content)
+  console.log(context)
+  const md = `00`
   return (
     <div>
       <Head>
@@ -35,9 +26,29 @@ A table:
       </div>
       <main>
         <Header />
-        {/* <ReactMarkdown># Hello, *world*!</ReactMarkdown> */}
-        <ReactMarkdown children={markdown} remarkPlugins={[remarkGfm]} />
+        <ReactMarkdown children={md} remarkPlugins={[remarkGfm]} />
+        <div>
+          {context.article_content}
+        </div>
       </main>
     </div>
   )
 }
+
+Detailed.getInitialProps = async (context)=>{
+  console.log(context.query.id)
+
+  let id = context.query.id
+
+  const promise = new Promise((resolve)=>{
+    axios('http://127.0.0.1:7001/default/getArticleById' + id).then(
+      (res)=>{
+        resolve(res.data.data[0])
+      }
+    )
+  })
+
+  return await promise
+}
+
+export default Detailed

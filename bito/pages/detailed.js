@@ -1,13 +1,13 @@
 import Head from 'next/head'
 import Header from '../components/Header'
 import { Breadcrumb, List } from 'antd'
-import ReactMarkdown from "react-markdown"
-import remarkGfm from 'remark-gfm'
+import MarkNav from 'markdown-navbar'
 import React, {useState} from "react" 
 import axios from 'axios'
-import marked from 'marked'
+import { marked } from 'marked'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/monokai-sublime.css'
+import 'markdown-navbar/dist/navbar.css';
 
 
 function Detailed(props) {
@@ -26,8 +26,25 @@ function Detailed(props) {
     }
   })
 
-  console.log(context)
-  const md = `00`
+  let html = marked(props.article_content)
+  const article = `# Markdown-Navbar Demo
+ 
+  ## Chicken Chicken
+  
+  Chicken Chicken Chicken Chicken Chicken.
+  
+  * Chicken Chicken Chicken Chicken Chicken.
+  * Chicken Chicken Chicken Chicken Chicken.
+  * Chicken Chicken Chicken Chicken Chicken.
+  
+  ### Chicken Chicken Chicken
+  
+  Chicken Chicken Chicken Chicken Chicken.
+  
+  #### Chicken Chicken Chicken Chicken
+  
+  Chicken Chicken Chicken Chicken Chicken Chicken.`;
+  let html2 = marked(article)
   return (
     <div>
       <Head>
@@ -43,10 +60,13 @@ function Detailed(props) {
       </div>
       <main>
         <Header />
-        <ReactMarkdown children={md} remarkPlugins={[remarkGfm]} />
         <div>
-          {context.article_content}
+          <MarkNav source = {props.article_content}/>
         </div>
+        
+        <div dangerouslySetInnerHTML={{__html:html2}} />
+        <div dangerouslySetInnerHTML={{__html:html}}/>
+
       </main>
     </div>
   )

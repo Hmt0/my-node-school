@@ -5,10 +5,27 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from 'remark-gfm'
 import React, {useState} from "react" 
 import axios from 'axios'
+import marked from 'marked'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/monokai-sublime.css'
 
 
-function Detailed(content) {
-  const [context, setContext] = useState(content)
+function Detailed(props) {
+  const renderer = new marked.Renderer()
+
+  marked.setOptions({
+    renderer: renderer,
+    gfm:true,
+    pedantic: false,
+    sanitize: false,
+    tables: true,
+    breaks: false,
+    smartLists: true,
+    highlight: function(code) {
+      return hljs.highlightAuto(code).value
+    }
+  })
+
   console.log(context)
   const md = `00`
   return (
@@ -41,7 +58,7 @@ Detailed.getInitialProps = async (context)=>{
   let id = context.query.id
 
   const promise = new Promise((resolve)=>{
-    axios('http://127.0.0.1:7001/default/getArticleById' + id).then(
+    axios('http://127.0.0.1:7001/default/getArticleById/' + id).then(
       (res)=>{
         resolve(res.data.data[0])
       }

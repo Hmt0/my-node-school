@@ -5,10 +5,29 @@ import { List } from 'antd'
 import Link from 'next/link'
 import axios from 'axios'
 import servicePath from "../config/aplUrl"
+import { marked } from 'marked'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/monokai-sublime.css'
+import 'markdown-navbar/dist/navbar.css';
 
 function Home(list) {
   const [blogList, setBlogList] = useState(list.data)
-  console.log(blogList)
+
+  const renderer = new marked.Renderer()
+  marked.setOptions({
+    renderer: renderer,
+    gfm:true,
+    pedantic: false,
+    sanitize: false,
+    tables: true,
+    breaks: false,
+    smartLists: true,
+    highlight: function(code) {
+      return hljs.highlightAuto(code).value
+    }
+  })
+
+
   return (
     <div>
       <Head>
@@ -30,7 +49,9 @@ function Home(list) {
                   <a>{item.title}</a>
                 </Link>
               </div>
-              <div className="blog-context">{item.introduce}</div>
+              <div className="blog-context"
+                dangerouslySetInnerHTML={{__html:marked(item.introduce)}}>
+              </div>
             </List.Item>
           )}
         />

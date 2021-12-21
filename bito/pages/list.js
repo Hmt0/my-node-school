@@ -9,6 +9,10 @@ import servicePath from "../config/aplUrl"
 
 function BlogList(list) {
   const [blogList, setBlogList] = useState(list.data)
+  // 动态获取数据
+  useEffect(() => {
+    setBlogList(list.data)
+  })
   return (
     <div>
       <Head>

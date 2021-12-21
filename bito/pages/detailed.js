@@ -28,24 +28,7 @@ function Detailed(props) {
   })
 
   let html = marked(props.article_content)
-  const article = `# Markdown-Navbar Demo
- 
-  ## Chicken Chicken
   
-  Chicken Chicken Chicken Chicken Chicken.
-  
-  * Chicken Chicken Chicken Chicken Chicken.
-  * Chicken Chicken Chicken Chicken Chicken.
-  * Chicken Chicken Chicken Chicken Chicken.
-  
-  ### Chicken Chicken Chicken
-  
-  Chicken Chicken Chicken Chicken Chicken.
-  
-  #### Chicken Chicken Chicken Chicken
-  
-  Chicken Chicken Chicken Chicken Chicken Chicken.`;
-  let html2 = marked(article)
   return (
     <div>
       <Head>
@@ -63,9 +46,7 @@ function Detailed(props) {
         <Header />
         <div>
           <MarkNav source = {props.article_content}/>
-        </div>
-        
-        <div dangerouslySetInnerHTML={{__html:html2}} />
+        </div>        
         <div dangerouslySetInnerHTML={{__html:html}}/>
 
       </main>

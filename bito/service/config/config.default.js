@@ -44,16 +44,16 @@ module.exports = appInfo => {
   };
 
   config.security = {
-    cswrf: {
-      enable: false
-    },
+    csrf: {enable: false},
     domainWhiteList: ['*']
-  }
-  config.cors = {
-    origin: '*',
-    allowMethods: 'GET, HEAD, PUT, POST, DELETE, PATCH. OPTIONS'
-  }
+  };
 
+  config.cors = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    allowMethods: 'GET, HEAD, PUT, POST, DELETE, PATCH, OPTIONS'
+  };
+  
   return {
     ...config,
     ...userConfig,

@@ -1,12 +1,15 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {marked} from 'marked'
 import '../static/AddArticle.css'
 import {Row, Col, Input, Selected, Button, DatePicker, Select} from 'antd'
+import axios from 'axios'
+import servicePath from '../config/apiUrl'
 
 const {Option} = Select
 const {TextArea} = Input
 
-function AddArticle() {
+
+function AddArticle(props) {
     const [articleId, setArticleId] = useState(0)
     const [articleTitle, setArticleTitle] = useState('')
     const [articleContent, setArticleContent] = useState('')
@@ -17,6 +20,11 @@ function AddArticle() {
     const [updateDate, setUpdateDate] = useState('')
     const [typeInfo, setTypeInfo] = useState([])
     const [selectedType, setSelectType] = useState(1)
+
+    useEffect(() => {
+        
+        getTypeInfo()
+    }, [])
 
     marked.setOptions({
         renderer: new marked.Renderer(),
@@ -41,6 +49,23 @@ function AddArticle() {
         setIntroducehtml(html)
     }
 
+    const getTypeInfo = () => {
+        axios({
+            method: 'get',
+            url: servicePath.getTypeInfo,
+            withCredentials: true
+        }).then(
+            res => {
+                if(res.data.data === '没有登录') {
+                    localStorage.removeItem('openId')
+                    props.history.push('/')
+                } else {
+                    setTypeInfo(res.data.data)
+                }
+            }
+        )
+    }
+
     return (
         <div>
             <Row gutter={5}>
@@ -53,8 +78,14 @@ function AddArticle() {
                             />
                         </Col>
                         <Col span={4}>
-                            <Select defaultValue='1' size='large'>
-                                <Option value='1'>视频教程</Option>
+                            <Select defaultValue={selectedType} size='large'>
+                                {
+                                    typeInfo.map((item, index) => {
+                                        return (
+                                            <Option key={index} value={item.id}>item.typeName</Option>
+                                        )
+                                    })
+                                }
                             </Select>
                         </Col>
                     </Row>
@@ -95,7 +126,7 @@ function AddArticle() {
                                 
                             </div>
                             <Col span={12}>
-                                <div className='date-select'>
+                                <div className='data-select'>
                                     <DatePicker 
                                         placeholder='发布日期'
                                         size='large'

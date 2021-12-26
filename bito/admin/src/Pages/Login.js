@@ -4,11 +4,10 @@ import {Card, Input, Button, Spin, message} from 'antd'
 import '../static/Login.css'
 import servicePath from "../config/apiUrl";
 import axios from 'axios'
-import { useHistory } from "react-router";
+import {useNavigate} from 'react-router-dom'
 
-function Login({...props}) {
-    console.log('000', props)
-    let history = useHistory();
+function Login() {
+    let navigate = useNavigate();
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [isLoading, setIsloading] = useState(false)
@@ -39,8 +38,9 @@ function Login({...props}) {
                 setIsloading(false)
                 console.log(res.data.data)
                 if(res.data.data === '登录成功') {
+                    console.log(res.data)
                     localStorage.setItem('openId', res.data.openId)
-                    props.history.push('/index')
+                    navigate('/index')
                     message.success('登录成功')
                 } else {
                     message.error('用户名密码错误')

@@ -4,12 +4,13 @@ import '../static/AddArticle.css'
 import {Row, Col, Input, Selected, Button, DatePicker, Select} from 'antd'
 import axios from 'axios'
 import servicePath from '../config/apiUrl'
+import { useNavigate } from 'react-router'
 
 const {Option} = Select
 const {TextArea} = Input
 
 
-function AddArticle(props) {
+function AddArticle() {
     const [articleId, setArticleId] = useState(0)
     const [articleTitle, setArticleTitle] = useState('')
     const [articleContent, setArticleContent] = useState('')
@@ -20,9 +21,9 @@ function AddArticle(props) {
     const [updateDate, setUpdateDate] = useState('')
     const [typeInfo, setTypeInfo] = useState([])
     const [selectedType, setSelectType] = useState(1)
+    const navigate = useNavigate()
 
-    useEffect(() => {
-        
+    useEffect(() => { 
         getTypeInfo()
     }, [])
 
@@ -56,9 +57,10 @@ function AddArticle(props) {
             withCredentials: true
         }).then(
             res => {
+                console.log(res.data)
                 if(res.data.data === '没有登录') {
                     localStorage.removeItem('openId')
-                    props.history.push('/')
+                    // navigate('/')
                 } else {
                     setTypeInfo(res.data.data)
                 }
@@ -82,7 +84,7 @@ function AddArticle(props) {
                                 {
                                     typeInfo.map((item, index) => {
                                         return (
-                                            <Option key={index} value={item.id}>item.typeName</Option>
+                                            <Option key={index} value={item.id}>{item.typeName}</Option>
                                         )
                                     })
                                 }

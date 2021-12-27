@@ -13,7 +13,7 @@ class MainController extends Controller{
         if(res.length > 0) {
             let openId = new Date().getTime()
             this.ctx.session.openId = {'openId': openId}
-            this.ctx.body = {'data': '登录成功', 'openId':'openId'}
+            this.ctx.body = {'data': '登录成功', 'openId':openId}
         } else {
             this.ctx.body = {'data': '登录失败'}
         }
@@ -22,6 +22,19 @@ class MainController extends Controller{
     async getTypeInfo(){
         const resType = await this.app.mysql.select('type')
         this.ctx.body = {data: resType}
+    }
+
+    async addArticle() {
+        let tmpArticle = this.ctx.request.body
+        console.log(tmpArticle)
+        const result = await this.app.mysql.insert('article', tmpArticle)
+        const insertSuccess = result.affectedRows === 1
+        const insertId = result.insertId
+
+        this.ctx.body = {
+            isSuccess: insertSuccess,
+            insertId: insertId
+        }
     }
 }
 

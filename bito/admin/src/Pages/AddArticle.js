@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {marked} from 'marked'
 import '../static/AddArticle.css'
-import {Row, Col, Input, Selected, Button, DatePicker, Select} from 'antd'
+import {Row, Col, Input, Selected, Button, DatePicker, Select, message} from 'antd'
 import axios from 'axios'
 import servicePath from '../config/apiUrl'
 import { useNavigate } from 'react-router'
@@ -68,6 +68,56 @@ function AddArticle() {
         )
     }
 
+    const selectTypeHandler = (value) => {
+        setSelectType(value)
+    }
+
+    const saveArticle = () => {
+        if(!selectedType) {
+            message.error('必须选择文章类型')
+            return false
+        } else if(!articleTitle) {
+            message.error('文章名称不能为空')
+            return false
+        } else if(!articleContent) {
+            message.error('文章内容不能为空')
+            return false
+        } else if(!introducemd) {
+            message.error('文章简介不能为空')
+            return false
+        } else if (!showDate) {
+            message.error('发布日期不能为空')
+            return false
+        }
+        let dataProps = {}
+        dataProps.type_id = selectedType
+        dataProps.title = articleTitle
+        dataProps.article_content = articleContent
+        dataProps.introduce = introducemd
+        let dateText = showDate.replace('-', '/')
+        dataProps.addTime = (new Date(dateText)).getTime()
+
+        if(articleId === 0) {
+            dataProps.view_count = 0
+            axios({
+                method: 'post',
+                url: servicePath.addArticle,
+                data: dataProps,
+                withCredentials: true
+            }).then(
+                res => {
+                    console.log(res)
+                    setArticleId(res.data.insertId)
+                    if(res.data.isSuccess) {
+                        message.success('文章保存成功')
+                    } else {
+                        message.error('文章保存失败')
+                    }
+                }
+            )
+        }
+    }
+
     return (
         <div>
             <Row gutter={5}>
@@ -75,12 +125,14 @@ function AddArticle() {
                     <Row gutter={10}>
                         <Col span={20}>
                             <Input 
+                                value={articleTitle}
                                 placeholder='博客标题'
                                 size='large'
+                                onChange={e => {setArticleTitle(e.target.value)}}
                             />
                         </Col>
                         <Col span={4}>
-                            <Select defaultValue={selectedType} size='large'>
+                            <Select defaultValue={selectedType} size='large' onChange={selectTypeHandler}>
                                 {
                                     typeInfo.map((item, index) => {
                                         return (
@@ -113,7 +165,7 @@ function AddArticle() {
                     <Row>
                         <Col span="24">
                             <Button size='large'>暂存文章</Button>
-                            <Button type='primary' size='large'>发布文章</Button>
+                            <Button type='primary' size='large' onClick={saveArticle}>发布文章</Button>
                         </Col>
                         <Col span="24">
                             <br />
@@ -130,6 +182,7 @@ function AddArticle() {
                             <Col span={12}>
                                 <div className='data-select'>
                                     <DatePicker 
+                                        onChange = {(data, dataString) => {setShowDate(dataString)}}
                                         placeholder='发布日期'
                                         size='large'
                                     />

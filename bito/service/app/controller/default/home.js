@@ -16,7 +16,6 @@ class HomeController extends Controller {
               'type.typeName as typeName ' + 
               'FROM article LEFT JOIN type ON article.type_id = type.id'
   const results = await this.app.mysql.query(sql)
-  console.log('result is', results)
   this.ctx.body = {data: results}
 
   }

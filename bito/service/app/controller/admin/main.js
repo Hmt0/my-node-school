@@ -8,7 +8,6 @@ class MainController extends Controller{
         let password = this.ctx.request.body.password
         const sql = "SELECT userName FROM admin_user WHERE userName = '" + 
             userName + "' AND password = '" + password + "';"
-        console.log(sql)
         const res = await this.app.mysql.query(sql)
         if(res.length > 0) {
             let openId = new Date().getTime()
@@ -21,12 +20,12 @@ class MainController extends Controller{
 
     async getTypeInfo(){
         const resType = await this.app.mysql.select('type')
+        console.log(resType)
         this.ctx.body = {data: resType}
     }
 
     async addArticle() {
         let tmpArticle = this.ctx.request.body
-        console.log(tmpArticle)
         const result = await this.app.mysql.insert('article', tmpArticle)
         const insertSuccess = result.affectedRows === 1
         const insertId = result.insertId
@@ -34,6 +33,22 @@ class MainController extends Controller{
         this.ctx.body = {
             isSuccess: insertSuccess,
             insertId: insertId
+        }
+    }
+
+    async index() {
+        this.ctx.body = {
+            data: 'hi'
+        }
+    }
+
+    async updateArticle() {
+        let tempArticle = this.ctx.request.body
+
+        const result = await this.app.mysql.update('article', tempArticle)
+        const updateSuccess = result.affectedRows === 1
+        this.ctx.body = {
+            isSuccess: updateSuccess
         }
     }
 }

@@ -11,7 +11,7 @@ const {TextArea} = Input
 
 
 function AddArticle() {
-    const [articleId, setArticleId] = useState(0)
+    const [articleId, setArticleId] = useState(0) // 文章ID，如果是0说明是新增，如果不是0说明是修改
     const [articleTitle, setArticleTitle] = useState('')
     const [articleContent, setArticleContent] = useState('')
     const [markdownContent, setMarkdownContent] = useState('预览内容')
@@ -57,7 +57,7 @@ function AddArticle() {
             withCredentials: true
         }).then(
             res => {
-                console.log(res.data)
+                console.log(res)
                 if(res.data.data === '没有登录') {
                     localStorage.removeItem('openId')
                     // navigate('/')
@@ -95,7 +95,7 @@ function AddArticle() {
         dataProps.article_content = articleContent
         dataProps.introduce = introducemd
         let dateText = showDate.replace('-', '/')
-        dataProps.addTime = (new Date(dateText)).getTime()
+        dataProps.addTime =(new Date(dateText).getTime())/1000
 
         if(articleId === 0) {
             dataProps.view_count = 0
@@ -108,6 +108,22 @@ function AddArticle() {
                 res => {
                     console.log(res)
                     setArticleId(res.data.insertId)
+                    if(res.data.isSuccess) {
+                        message.success('文章添加成功')
+                    } else {
+                        message.error('文章添加失败')
+                    }
+                }
+            )
+        } else {
+            dataProps.Id = articleId
+            axios({
+                method: 'post',
+                url: servicePath.updateArticle,
+                data: dataProps,
+                withCredentials: true
+            }).then(
+                res => {
                     if(res.data.isSuccess) {
                         message.success('文章保存成功')
                     } else {

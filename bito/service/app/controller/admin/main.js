@@ -51,6 +51,19 @@ class MainController extends Controller{
             isSuccess: updateSuccess
         }
     }
+
+    async getArticleList() {
+        let sql = 'SELECT article.Id as id ,' +
+              'article.title as title ,' + 
+              'article.introduce as introduce ,' + 
+              'article.addTime as addTime ,' + 
+              'article.view_count as view_count ,' + 
+              'type.typeName as typeName ' + 
+              'FROM article LEFT JOIN type ON article.type_id = type.id ' + 
+              'ORDER BY article.id DESC' // 倒序排列
+        const resList = await this.app.mysql.query(sql)
+        this.ctx.body = {list: resList}
+    }
 }
 
 module.exports = MainController

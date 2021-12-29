@@ -57,7 +57,6 @@ function AddArticle() {
             withCredentials: true
         }).then(
             res => {
-                console.log(res)
                 if(res.data.data === '没有登录') {
                     localStorage.removeItem('openId')
                     // navigate('/')
@@ -106,7 +105,6 @@ function AddArticle() {
                 withCredentials: true
             }).then(
                 res => {
-                    console.log(res)
                     setArticleId(res.data.insertId)
                     if(res.data.isSuccess) {
                         message.success('文章添加成功')

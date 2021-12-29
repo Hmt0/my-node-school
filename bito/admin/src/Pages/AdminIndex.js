@@ -8,18 +8,28 @@ import {
 } from '@ant-design/icons';
 import '../static/AdminIndex.css'
 import React, { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import AddArticle from './AddArticle';
+import ArticleList from './ArticleList';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 function AdminIndex() {
   const [collapsed, setCollapsed] = useState(false)
+  const navigate = useNavigate()
 
   const onCollapse = collapsed => {
     setCollapsed(collapsed);
   };
+
+  const handleClickArticle = e => {
+      if(e.key === 'addArticle') {
+            navigate('/index/index')
+      } else {
+            navigate('/index/list')
+      }
+  }
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -32,9 +42,14 @@ function AdminIndex() {
             <Menu.Item key="2" icon={<DesktopOutlined />}>
                 添加文章
             </Menu.Item>
-            <SubMenu key="sub1" icon={<UserOutlined />} title="文章管理">
-                <Menu.Item key="3">文章列表</Menu.Item>
-                <Menu.Item key="4">添加文章</Menu.Item>
+            <SubMenu
+                key="sub1"
+                icon={<UserOutlined />}
+                onClick={handleClickArticle}
+                title="文章管理"
+            >
+                <Menu.Item key="addArticle">文章列表</Menu.Item>
+                <Menu.Item key="articleList">添加文章</Menu.Item>
             </SubMenu>
             <SubMenu key="sub2" icon={<TeamOutlined />} title="浏览管理">
                 <Menu.Item key="6">删除留言</Menu.Item>
@@ -53,10 +68,10 @@ function AdminIndex() {
             <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
                 <div>
                     <Routes>
-                        <Route path="/" exact element={<AddArticle />}></Route>
+                        <Route path="/index/" exact element={<AddArticle />}></Route>
+                        <Route path="/list/" exact element={<ArticleList />}></Route>
                     </Routes>
                 </div>
-                HMT后台管理
             </div>
             </Content>
             <Footer style={{ textAlign: 'center' }}>this is hmt</Footer>

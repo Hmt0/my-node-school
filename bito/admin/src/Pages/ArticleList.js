@@ -23,6 +23,26 @@ function ArticleList(props) {
             }
         )
     }
+    // 删除文章
+    const delArticle = (id) => {
+        confirm({
+            title:'确认要删除这篇文章吗？',
+            content: '点击OK按钮删除',
+            onOk() {
+                axios(servicePath.delArticle + id, {withCredentials: true}).then(
+                    res => {
+                        message.success('文章删除成功')
+                        getList()
+                        // 如果是前台数据并发量很大的时候，应该修改前端而不是重新获取数据
+                    }
+                )
+            },
+            onCancel(){
+                message.success('文章没有任何变化')
+            }
+
+        })
+    }
 
     return (
         <div>
@@ -65,7 +85,7 @@ function ArticleList(props) {
                             </Col>
                             <Col span={4}>
                                 <Button type="primary">修改</Button>
-                                <Button>删除</Button>
+                                <Button onClick={() => {delArticle(item.id)}}>删除</Button>
                             </Col>
                         </Row>
                     </List.Item>

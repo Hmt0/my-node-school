@@ -4,7 +4,8 @@ let servicePath = {
     getArticleList: ipUrl + 'getArticleList', // 首页接口
     getArticleById: ipUrl + 'getArticleById/', // 详细页接口
     getTypeInfo: ipUrl + 'getTypeInfo', // 文章类别接口
-    getListById: ipUrl + 'getListById/', // 根据类别ID获得文章
+    getListById: ipUrl + 'getListById', // 根据类别ID获得文章
+    delArticle: ipUrl + 'delArticle/', // 删除文章
 }
 
 export default servicePath

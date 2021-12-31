@@ -71,6 +71,22 @@ class MainController extends Controller{
         this.ctx.body = {data: res}
         
     }
+
+    async getArticleById() {
+        let id = this.ctx.params.id
+        const sql = 'SELECT article.Id as id ,' +
+        'article.title as title ,' + 
+        'article.introduce as introduce ,' + 
+        "FROM_UNIXTIME(article.addTime, '%Y-%m-%d) as addtime ,"
+        'article.view_count as view_count ,' + 
+        'type.typeName as typeName ' + 
+        'type.id as typeId ' +
+        'FROM article LEFT JOIN type ON article.type_id = type.id ' + 
+        'WHERE article.id = ' + id
+
+        const reault = await this.app.mysql.query(sql)
+        this.ctx.body = {data: result}
+    }
 }
 
 module.exports = MainController

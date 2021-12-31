@@ -9,7 +9,7 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/monokai-sublime.css'
 import 'markdown-navbar/dist/navbar.css';
 import servicePath from '../config/aplUrl'
-
+import Link from 'next/link'
 
 function Detailed(props) {
   const renderer = new marked.Renderer()
@@ -38,7 +38,7 @@ function Detailed(props) {
       </Head>
       <div className="bread-div">
           <Breadcrumb>
-            <Breadcrumb.Item><a href="/">首页</a></Breadcrumb.Item>
+            <Breadcrumb.Item><Link href="/">首页</Link></Breadcrumb.Item>
             <Breadcrumb.Item>视频列表</Breadcrumb.Item>
           </Breadcrumb>
       </div>

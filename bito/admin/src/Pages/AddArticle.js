@@ -10,7 +10,7 @@ const {Option} = Select
 const {TextArea} = Input
 
 
-function AddArticle() {
+function AddArticle(props) {
     const [articleId, setArticleId] = useState(0) // 文章ID，如果是0说明是新增，如果不是0说明是修改
     const [articleTitle, setArticleTitle] = useState('')
     const [articleContent, setArticleContent] = useState('')
@@ -25,6 +25,11 @@ function AddArticle() {
 
     useEffect(() => { 
         getTypeInfo()
+        let tmpId = 0
+        if(tmpId) {
+            setArticleId(tmpId)
+            getArticleById(tmpId)
+        }
     }, [])
 
     marked.setOptions({
@@ -132,6 +137,25 @@ function AddArticle() {
         }
     }
 
+    const getArticleById = (id) => {
+        axios(servicePath.getArticleById + id, {
+            withCredentials: true
+        }).them(
+            res => {
+                let articleInfo = res.data.data[0]
+                setArticleTitle(articleInfo.title)
+                setArticleContent(articleInfo.article_content)
+                let html = marked(articleInfo.article_content)
+                setMarkdownContent(html)
+                setIntroducemd(articleInfo.introduce)
+                let tmpInt = marked(articleInfo.introduce)
+                setIntroducehtml(tmpInt)
+                setShowDate(articleInfo.addTime)
+                setSelectType(articleInfo.type_id)
+            }
+        )
+    }
+
     return (
         <div>
             <Row gutter={5}>
@@ -163,6 +187,7 @@ function AddArticle() {
                                 className='mk-content'
                                 rows={35}
                                 placeholder='文章内容'
+                                value = {articleContent}
                                 onChange={changeContent}
                             />
                         </Col>
@@ -186,6 +211,7 @@ function AddArticle() {
                             <TextArea
                                 row={4}
                                 placeholder='文章简介'
+                                value = {introducemd}
                                 onChange={changeIntroduce}
                             ></TextArea>
                             <div className='introduce-html'

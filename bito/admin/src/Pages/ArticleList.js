@@ -1,4 +1,5 @@
 import React, { useState, useEffect} from "react"
+import { useNavigate } from "react-router"
 import { List, Row, Col, Modal, message, Button } from "antd"
 import axios from "axios"
 import servicePath from '../config/apiUrl'
@@ -7,6 +8,7 @@ const {confirm} = Modal
 
 function ArticleList(props) {
     const [list, setList] = useState([])
+    const navigate = useNavigate()
 
     useEffect(() => {
         getList()
@@ -42,6 +44,11 @@ function ArticleList(props) {
             }
 
         })
+    }
+
+    // 修改文章的跳转方法
+    const updateArticle = (id, checked) => {
+        navigate('/index/add')
     }
 
     return (
@@ -84,7 +91,7 @@ function ArticleList(props) {
                                 {item.viewCount}
                             </Col>
                             <Col span={4}>
-                                <Button type="primary">修改</Button>
+                                <Button type="primary" onClick={()=>{updateArticle(item.id)}}>修改</Button>
                                 <Button onClick={() => {delArticle(item.id)}}>删除</Button>
                             </Col>
                         </Row>

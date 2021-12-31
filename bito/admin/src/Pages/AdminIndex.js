@@ -25,7 +25,7 @@ function AdminIndex() {
 
   const handleClickArticle = e => {
       if(e.key === 'addArticle') {
-            navigate('/index/index')
+            navigate('/index/add')
       } else {
             navigate('/index/list')
       }
@@ -48,8 +48,8 @@ function AdminIndex() {
                 onClick={handleClickArticle}
                 title="文章管理"
             >
-                <Menu.Item key="addArticle">文章列表</Menu.Item>
-                <Menu.Item key="articleList">添加文章</Menu.Item>
+                <Menu.Item key="articleList">文章列表</Menu.Item>
+                <Menu.Item key="addArticle">添加文章</Menu.Item>
             </SubMenu>
             <SubMenu key="sub2" icon={<TeamOutlined />} title="浏览管理">
                 <Menu.Item key="6">删除留言</Menu.Item>
@@ -68,8 +68,9 @@ function AdminIndex() {
             <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
                 <div>
                     <Routes>
-                        <Route path="/index/" exact element={<AddArticle />}></Route>
+                        <Route path="/add/" exact element={<AddArticle />}></Route>
                         <Route path="/list/" exact element={<ArticleList />}></Route>
+                        <Route path="/add/:id" exact element={<ArticleList />}></Route>
                     </Routes>
                 </div>
             </div>
